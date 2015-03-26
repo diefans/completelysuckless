@@ -1,26 +1,14 @@
 /* groundwork sass */
 // @import "groundwork/groundwork.sass"
 
-
 .suckless-complete
-  position: relative
 
   ul
-    position: absolute
-    z-index: 1
-
     background-color: $background-color
-    width: 100%
-
-    list-style-type: none
-    margin-left: 0
-    display: none
-
     border: 1px solid $border-color
     +rounded($default-radius)
 
     li
-      cursor: pointer
       padding: .4em
 
       &:first-child
@@ -37,6 +25,3 @@
 
       &:hover
         background-color: lighten($selection-color, 27.5%)
-
-    &.active
-      display: block
