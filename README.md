@@ -86,7 +86,7 @@ Feel free to contribute. Stay clean and easy.
 
 # UNLICENSE - payback
 
-You cannot open source something, so speaking "releasing" it and in the same moment hold it tight.
+You cannot open a source to something, so speaking "releasing" it and in the same moment hold it tight.
 If it's out, you have to let it go. You cannot keep control.
 
-If someone wants to keep control of something, if he wants to keep things as they are or he doesn't want somthing to be modified, used, copied and what else - he MUST keep it secret!
+If someone wants to keep control of something, if he wants to keep things as they are or he doesn't want something to be modified, used, copied and what else - he MUST keep it secret!
