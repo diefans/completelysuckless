@@ -79,12 +79,12 @@ Since I am just playing with http://groundworkcss.github.io, I have also provide
 I tested this with chrome, firefox and opera. I welcome luckily any report from an IE user.
 
 
-# Bugs, issues, suggestions and collaboration
+## Bugs, issues, suggestions and collaboration
 
 Feel free to contribute. Stay clean and easy.
 
 
-# UNLICENSE - payback
+## UNLICENSE - payback
 
 You cannot open a source to something, so speaking "releasing" it and in the same moment hold it tight.
 If it's out, you have to let it go. You cannot keep control.
