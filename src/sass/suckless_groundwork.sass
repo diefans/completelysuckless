@@ -1,0 +1,42 @@
+/* groundwork sass */
+// @import "groundwork/groundwork.sass"
+
+
+.suckless-complete
+  position: relative
+
+  ul
+    position: absolute
+    z-index: 1
+
+    background-color: $background-color
+    width: 100%
+
+    list-style-type: none
+    margin-left: 0
+    display: none
+
+    border: 1px solid $border-color
+    +rounded($default-radius)
+
+    li
+      cursor: pointer
+      padding: .4em
+
+      &:first-child
+        +rounded($default-radius $default-radius 0 0)
+
+      &:last-child
+        +rounded(0 0 $default-radius $default-radius)
+
+      &:first-child:last-child
+        +rounded($default-radius)
+
+      &.selected
+        background-color: $selection-color
+
+      &:hover
+        background-color: lighten($selection-color, 27.5%)
+
+    &.active
+      display: block
