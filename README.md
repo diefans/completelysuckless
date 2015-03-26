@@ -67,5 +67,26 @@ angular.module "sucklessFoo", ["completelysuckless"]
 </div>
 ```
 
+### Style
+
+There is a minimalistic style applied, just to have it functional.
+
+Since I am just playing with http://groundworkcss.github.io, I have also provided a minimalistic ``suckless_groundwork.sass``.
 
 
+## Browser support
+
+I tested this with chrome, firefox and opera. I welcome luckily any report from an IE user.
+
+
+# Bugs, issues, suggestions and collaboration
+
+Feel free to contribute. Stay clean and easy.
+
+
+# UNLICENSE - payback
+
+You cannot open source something, so speaking "releasing" it and in the same moment hold it tight.
+If it's out, you have to let it go. You cannot keep control.
+
+If someone wants to keep control of something, if he wants to keep things as they are or he doesn't want somthing to be modified, used, copied and what else - he MUST keep it secret!
