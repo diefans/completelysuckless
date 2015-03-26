@@ -2,7 +2,7 @@
   "name": "completelysuckless",
   "version": "0.0.1",
   "keywords": ["angularjs", "autocomplete", "suckless"],
-  "main": "src/comletelysuckless.coffee",
+  "main": "src/completelysuckless.coffee",
   "dependencies": {
     "lodash": "~3.1.0"
   },
