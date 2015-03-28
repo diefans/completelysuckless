@@ -68,8 +68,8 @@ angular.module "completelysuckless", []
     require: "sucklessComplete"
     transclude: true
     scope:
-      # this is the input value bound from outer scope
-      value: "="
+      # this is the optional input value bound from outer scope
+      value: "=?"
 
       # use this callback if you don't bind an object for your value
       # inheritance/double binding is not working on primitive values
@@ -86,7 +86,7 @@ angular.module "completelysuckless", []
 
       # callback to compare two objects
       # this is used to preserve the selection upon reload of choices
-      identity: "="
+      identity: "=?"
 
     template: '<div class="suckless-complete">
       <input type="text" data-ng-model="value" placeholder="{{ placeholder }}"/>
