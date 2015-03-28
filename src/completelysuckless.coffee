@@ -10,17 +10,40 @@ angular.module "completelysuckless", []
     link:
       pre: (scope, element, attrs, ctrl, transclude) ->
         if not transclude?
-          throw minErr('sucklessTranscope')(
+          # startingTag is closed in newer angular
+          NODE_TYPE_TEXT = 3
+          startingTag = (element) ->
+            element = $(element).clone()
+            try
+              # turns out IE does not let you set .html() on elements which
+              # are not allowed to have children. So we just ignore it.
+              element.empty()
+            catch e
+              # pass
+
+            elemHtml = $('<div>').append(element).html()
+            try
+              elemHtml if element[0].nodeType == NODE_TYPE_TEXT
+              else
+                elemHtml.
+                match(/^(<[^>]+>)/)[1].
+                replace(/^<([\w\-]+)/, (match, nodeName) ->
+                  '<' + nodeName
+                )
+            catch e
+              elemHtml
+
+          throw angular.$$minErr('ngTransclude')(
             'orphan',
             'Illegal use of ngTransclude directive in the template!
             No parent directive that requires a transclusion found.
             Element: {0}',
-            startingTag($element)
+            startingTag(element)
           )
 
-        iScopeType = attrs['sucklessTranscope'] || 'parent'
+        scopeType = attrs['sucklessTranscope'] || 'parent'
 
-        switch iScopeType
+        switch scopeType
           when "sibling"
             transclude (clone) ->
               element.empty()
@@ -47,6 +70,13 @@ angular.module "completelysuckless", []
     scope:
       # this is the input value bound from outer scope
       value: "="
+
+      # use this callback if you don't bind an object for your value
+      # inheritance/double binding is not working on primitive values
+      # when used within a ng-if or ng-switch, ...
+      # see https://groups.google.com/forum/#!topic/angular/B2uB8-9_Xbk
+      # see http://plnkr.co/OllvtOdZoA1vPd4pdKjQ
+      update: "="
 
       # these are the choices
       choices: "="
@@ -191,11 +221,17 @@ angular.module "completelysuckless", []
           # to separate outer choices from inner
           @choices = choices
 
+        # if an update callback is given, we use it
+        # this is to overcome inheritance and overriding of object properties
+        if $scope.update?
+          $scope.$watch 'value', (value) ->
+            $scope.update(value)
+
         # just to set css class=selected
         $scope.isSelected = (choice) =>
           choice == @getValue()
 
-        $scope.takeChoice = (choice) ->
+        $scope.takeChoice = (choice) =>
           @choose(choice)
 
       cmp: (a, b) ->

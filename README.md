@@ -40,9 +40,18 @@ angular.module "sucklessFoo", ["completelysuckless"]
   $scope.identity = (choice) ->
     return choice.name
 
-  $scope.$watch "value", (value) ->
+  $scope.input =
+    value: null
+
+  $scope.$watch "input.value", (value) ->
     console.log "new value", value
     # do something to load new choices...
+
+  # use this if your value is not an object property
+  # and you are using suckless-complete within ng-if or ng-switch
+  # $scope.updateChoices = (value) ->
+  #  console.log "new value", value
+  #  # do something to load new choices...
 ```
 
 ```html
@@ -50,10 +59,12 @@ angular.module "sucklessFoo", ["completelysuckless"]
     <!--
         data-tab-keys enables tab and shift-tab to circle through choices,
         thus disabling default focus moves.
+
+        data-update="updateChoices" can be useful for primitive input value
     -->
     <suckless-complete
         data-choose="choose"
-        data-value="value"
+        data-value="input.value"
         data-choices="choices"
         data-identity="identity"
         data-tab-keys
