@@ -8,8 +8,7 @@
   ],
   "ignore": "",
   "dependencies": {
-      "angular": "*",
-      "lodash": "~3.1.0"
+      "angular": "*"
   },
   "devDependencies": {
   }

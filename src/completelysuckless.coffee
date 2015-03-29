@@ -68,7 +68,7 @@ angular.module "completelysuckless", []
     require: "sucklessComplete"
     transclude: true
     scope:
-      # this is the optional input value bound from outer scope
+      # this is the input value bound from outer scope
       value: "=?"
 
       # use this callback if you don't bind an object for your value
@@ -76,7 +76,7 @@ angular.module "completelysuckless", []
       # when used within a ng-if or ng-switch, ...
       # see https://groups.google.com/forum/#!topic/angular/B2uB8-9_Xbk
       # see http://plnkr.co/OllvtOdZoA1vPd4pdKjQ
-      update: "="
+      update: "=?"
 
       # these are the choices
       choices: "="
@@ -87,6 +87,8 @@ angular.module "completelysuckless", []
       # callback to compare two objects
       # this is used to preserve the selection upon reload of choices
       identity: "=?"
+
+      autoSelect: "=?"
 
     template: '<div class="suckless-complete">
       <input type="text" data-ng-model="value" placeholder="{{ placeholder }}"/>
@@ -153,7 +155,7 @@ angular.module "completelysuckless", []
 
           when key.enter
             # choose selected value
-            ctrl.choose(ctrl.getValue())
+            ctrl.choose(ctrl.getSelectionValue())
             # hide choices
             ctrl.blur()
 
@@ -171,35 +173,41 @@ angular.module "completelysuckless", []
       constructor: ($scope) ->
         # this is our default identity function
         if not $scope.identity?
-          @identity = (value) ->
-            _.omit(value, (value, key) ->
-              # we leave out $ vars and functions
-              if _.startsWith(key, "$") \
-              or typeof value is "function" then return true
-
-              return false
-            )
+          @identity = (obj) ->
+            new -> @[key] = value for key, value of obj \
+              when typeof value != "function" and key[0] != "$"
 
         else
           @identity = $scope.identity
 
+        @autoSelect = $scope.autoSelect
+
         # choose a selection
-        @choose = (value) ->
+        @choose = (selection) ->
           # either callback or set var directly
           if typeof $scope.choose is "function"
-            $scope.choose(value)
+            $scope.choose(selection, $scope.value, @)
 
           else
-            $scope.choose = value
+            $scope.choose = selection
 
         # new digest on selection change
         @update = ->
           # stores the selected value
           # this is usefull to reselect this value if
           # it is still there when choices change
-          @selectedValue = @getValue()
+          @selectedValue = @getSelectionValue()
 
           $scope.$apply()
+
+        # reset all values
+        @reset = ->
+          $scope.value = undefined
+          @deselect()
+
+        # access input value
+        @getValue = ->
+          $scope.value
 
         # set the state of the completion list
         @activateList = (state) ->
@@ -229,30 +237,59 @@ angular.module "completelysuckless", []
 
         # just to set css class=selected
         $scope.isSelected = (choice) =>
-          choice == @getValue()
+          choice == @getSelectionValue()
 
+        # for clicking: see template
         $scope.takeChoice = (choice) =>
           @choose(choice)
 
+      # compares two things
+      # TODO nested comparision
       cmp: (a, b) ->
-        _.isEqual(@identity(a), @identity(b))
+        # test property names
+        aProps = (key for key of a)
+        bProps = (key for key of b)
 
+        # test length
+        if aProps.length != bProps.length then return false
+
+        # all properties have to be defined
+        for key in aProps
+          if bProps.indexOf(key) == -1 then return false
+
+        # all values have to be the same
+        for key, value of a
+          if b[key] != value then return false
+
+        true
+
+      # find the last selection on choices update
       reselect: (choices) =>
-        if @selectedValue?
-          for value, i in choices
-            if @cmp(value, @selectedValue)
-              @selected = i
-              return
+        autoSelected = undefined
+        reSelected = undefined
 
+        if choices?
+          for choice, i in choices
+            if @autoSelect? and not autoSelected? \
+            and @autoSelect(@getValue(), choice)
+              autoSelected = i
+
+            if @selectedValue? and not reSelected? \
+            and @cmp(@selectedValue, choice)
+              reSelected = i
+
+        @selected = if autoSelected? then autoSelected else reSelected
+
+        if not @selected?
           @deselect()
 
+      # reset selection
       deselect: ->
-        # reset select
         @selected = undefined
         @selectedValue = undefined
 
       # return the value of the selected index
-      getValue: ->
+      getSelectionValue: ->
         if @selected? then @choices[@selected] else undefined
 
       # just select the next choice
