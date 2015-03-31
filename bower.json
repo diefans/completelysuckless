@@ -1,6 +1,6 @@
 {
   "name": "completelysuckless",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "keywords": ["angularjs", "autocomplete", "suckless"],
   "main": [
       "dist/completelysuckless.js",

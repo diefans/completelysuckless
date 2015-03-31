@@ -179,6 +179,9 @@
             return $scope.value;
           };
           this.activateList = function(state) {
+            if ((this.choices == null) || this.choices.length === 0) {
+              state = false;
+            }
             if ($scope.activeList !== state) {
               $scope.activeList = state;
               return this.update();

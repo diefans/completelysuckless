@@ -217,8 +217,12 @@ angular.module "completelysuckless", []
 
         # set the state of the completion list
         @activateList = (state) ->
+          if not @choices? or @choices.length == 0
+            state = false
+
           if $scope.activeList != state
             $scope.activeList = state
+
             @update()
 
         # initialize selection
