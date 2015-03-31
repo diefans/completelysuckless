@@ -88,6 +88,7 @@ angular.module "completelysuckless", []
       # this is used to preserve the selection upon reload of choices
       identity: "=?"
 
+      # callback(value, choice): if true will select the choice
       autoSelect: "=?"
 
     template: '<div class="suckless-complete">
@@ -120,6 +121,9 @@ angular.module "completelysuckless", []
         ctrl: 17
 
       if "placeholder" of attrs then scope.placeholder = attrs.placeholder
+
+      # use data-no-choice to allow choosing a none-selection by pressing enter
+      noChoice = attrs.noChoice? and true or false
 
       # setup event listeners
       inputElement = element.find("input")
@@ -155,9 +159,11 @@ angular.module "completelysuckless", []
 
           when key.enter
             # choose selected value
-            ctrl.choose(ctrl.getSelectionValue())
-            # hide choices
-            ctrl.blur()
+            selectionValue = ctrl.getSelectionValue()
+            if selectionValue? or noChoice
+              ctrl.choose(selectionValue)
+              # hide choices
+              ctrl.blur()
 
           when key.tab
             # tabKeys attribute enables tab selection

@@ -1,10 +1,10 @@
 {
   "name": "completelysuckless",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "keywords": ["angularjs", "autocomplete", "suckless"],
   "main": [
-      "src/completelysuckless.coffee",
-      "src/css/completelysuckless.css"
+      "dist/completelysuckless.js",
+      "dist/css/completelysuckless.css"
   ],
   "ignore": "",
   "dependencies": {

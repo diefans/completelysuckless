@@ -40,6 +40,12 @@ angular.module "sucklessFoo", ["completelysuckless"]
   $scope.identity = (choice) ->
     return choice.name
 
+  # select a choice if its lowercase name equals the input value
+  $scope.autoSelect: (value, choice) ->
+    if value? and value.toLowerCase() == choice.name.toLowerCase()
+      true
+    else false
+
   $scope.input =
     value: null
 
@@ -60,6 +66,8 @@ angular.module "sucklessFoo", ["completelysuckless"]
         data-tab-keys enables tab and shift-tab to circle through choices,
         thus disabling default focus moves.
 
+        data-no-choice enables entering a value without selecting a choice
+
         data-update="updateChoices" can be useful for primitive input value
     -->
     <suckless-complete
@@ -67,7 +75,9 @@ angular.module "sucklessFoo", ["completelysuckless"]
         data-value="input.value"
         data-choices="choices"
         data-identity="identity"
+        data-auto-select="autoSelect"
         data-tab-keys
+        data-no-choice
         placeholder="enter something...">
         <!--
             choice is one of the choices.
