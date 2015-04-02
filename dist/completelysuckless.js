@@ -192,7 +192,8 @@
           $scope.$watch('choices', (function(_this) {
             return function(choices) {
               _this.choices = choices;
-              return _this.reselect();
+              _this.reselect();
+              return _this.activateList(true);
             };
           })(this));
           if ($scope.update != null) {

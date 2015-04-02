@@ -239,6 +239,9 @@ angular.module "completelysuckless", []
           # try to find last selection in new choices
           @reselect()
 
+          # activate list on change
+          @activateList(true)
+
         # if an update callback is given, we use it
         # this is to overcome inheritance and overriding of object properties
         if $scope.update?
