@@ -105,7 +105,7 @@ angular.module "completelysuckless", []
       key =
         tab: 9
         enter: 13
-        esc: 27     # done via blur
+        esc: 27
         left: 37
         up: 38
         right: 39
@@ -165,6 +165,9 @@ angular.module "completelysuckless", []
               # hide choices
               ctrl.blur()
 
+          when key.esc
+            ctrl.blur()
+
           when key.tab
             # tabKeys attribute enables tab selection
             if not "tabKeys" of attrs then return
@@ -216,14 +219,14 @@ angular.module "completelysuckless", []
           $scope.value
 
         # set the state of the completion list
-        @activateList = (state) ->
+        @activateList = (state, update=true) ->
           if not @choices? or @choices.length == 0
             state = false
 
           if $scope.activeList != state
             $scope.activeList = state
 
-            @update()
+            if update then @update()
 
         # initialize selection
         @deselect()
@@ -239,8 +242,8 @@ angular.module "completelysuckless", []
           # try to find last selection in new choices
           @reselect()
 
-          # activate list on change
-          @activateList(true)
+          # don't update, since digest already running
+          if @hasFocus then @activateList(true, false)
 
         # if an update callback is given, we use it
         # this is to overcome inheritance and overriding of object properties
@@ -330,6 +333,7 @@ angular.module "completelysuckless", []
       focus: ->
         if @blurring? then clearTimeout(@blurring)
 
+        @hasFocus = true
         @activateList(true)
 
       blur: (delay) ->
@@ -338,6 +342,7 @@ angular.module "completelysuckless", []
           # so the selection is lost after coming back
           #@deselect()
           @activateList(false)
+          @hasFocus = false
 
         if delay?
           if typeof delay == "boolean" then delay = 150

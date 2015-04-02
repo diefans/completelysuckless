@@ -125,6 +125,8 @@
                 return ctrl.blur();
               }
               break;
+            case key.esc:
+              return ctrl.blur();
             case key.tab:
               if (!"tabKeys" in attrs) {
                 return;
@@ -178,13 +180,18 @@
           this.getValue = function() {
             return $scope.value;
           };
-          this.activateList = function(state) {
+          this.activateList = function(state, update) {
+            if (update == null) {
+              update = true;
+            }
             if ((this.choices == null) || this.choices.length === 0) {
               state = false;
             }
             if ($scope.activeList !== state) {
               $scope.activeList = state;
-              return this.update();
+              if (update) {
+                return this.update();
+              }
             }
           };
           this.deselect();
@@ -193,7 +200,9 @@
             return function(choices) {
               _this.choices = choices;
               _this.reselect();
-              return _this.activateList(true);
+              if (_this.hasFocus) {
+                return _this.activateList(true, false);
+              }
             };
           })(this));
           if ($scope.update != null) {
@@ -321,6 +330,7 @@
           if (this.blurring != null) {
             clearTimeout(this.blurring);
           }
+          this.hasFocus = true;
           return this.activateList(true);
         };
 
@@ -328,7 +338,8 @@
           var blur;
           blur = (function(_this) {
             return function() {
-              return _this.activateList(false);
+              _this.activateList(false);
+              return _this.hasFocus = false;
             };
           })(this);
           if (delay != null) {
