@@ -191,14 +191,16 @@
           this.choices = $scope.choices;
           $scope.$watch('choices', (function(_this) {
             return function(choices) {
-              _this.reselect(choices);
-              return _this.choices = choices;
+              _this.choices = choices;
+              return _this.reselect();
             };
           })(this));
           if ($scope.update != null) {
-            $scope.$watch('value', function(value) {
-              return $scope.update(value);
-            });
+            $scope.$watch('value', (function(_this) {
+              return function(value) {
+                return $scope.update(value, _this);
+              };
+            })(this));
           }
           $scope.isSelected = (function(_this) {
             return function(choice) {
@@ -249,13 +251,14 @@
           return true;
         };
 
-        _Class.prototype.reselect = function(choices) {
-          var autoSelected, choice, i, j, len, reSelected;
+        _Class.prototype.reselect = function() {
+          var autoSelected, choice, i, j, len, reSelected, ref;
           autoSelected = void 0;
           reSelected = void 0;
-          if (choices != null) {
-            for (i = j = 0, len = choices.length; j < len; i = ++j) {
-              choice = choices[i];
+          if (this.choices != null) {
+            ref = this.choices;
+            for (i = j = 0, len = ref.length; j < len; i = ++j) {
+              choice = ref[i];
               if ((this.autoSelect != null) && (autoSelected == null) && this.autoSelect(this.getValue(), choice)) {
                 autoSelected = i;
               }

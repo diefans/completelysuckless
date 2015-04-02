@@ -232,18 +232,18 @@ angular.module "completelysuckless", []
         @choices = $scope.choices
 
         $scope.$watch 'choices', (choices) =>
-          # try to find last selection in new choices
-          @reselect(choices)
-
           # XXX at the moment I feel it sane
           # to separate outer choices from inner
           @choices = choices
 
+          # try to find last selection in new choices
+          @reselect()
+
         # if an update callback is given, we use it
         # this is to overcome inheritance and overriding of object properties
         if $scope.update?
-          $scope.$watch 'value', (value) ->
-            $scope.update(value)
+          $scope.$watch 'value', (value) =>
+            $scope.update(value, @)
 
         # just to set css class=selected
         $scope.isSelected = (choice) =>
@@ -274,12 +274,12 @@ angular.module "completelysuckless", []
         true
 
       # find the last selection on choices update
-      reselect: (choices) =>
+      reselect: =>
         autoSelected = undefined
         reSelected = undefined
 
-        if choices?
-          for choice, i in choices
+        if @choices?
+          for choice, i in @choices
             if @autoSelect? and not autoSelected? \
             and @autoSelect(@getValue(), choice)
               autoSelected = i
